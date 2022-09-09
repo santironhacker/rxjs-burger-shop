@@ -13,7 +13,6 @@ import * as fromShoppingList from './store/shopping-list.reducer';
 })
 export class ShoppingListComponent implements OnInit {
   ingredients: Observable<{ ingredients: Ingredient[] } >;
-  private subscription: Subscription;
 
   constructor(
     private slService: ShoppingListService,
@@ -27,6 +26,6 @@ export class ShoppingListComponent implements OnInit {
   }
 
   onEditItem(index: number) {
-    this.slService.startedEditing.next(index);
+    this.slService.startEditing(index);
   }
 }

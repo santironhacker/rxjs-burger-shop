@@ -8,6 +8,7 @@ import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Ingredient } from '../../shared/ingredient.model';
 import { ShoppingListService } from '../shopping-list.service';
+import * as fromShoppingList from '../store/shopping-list.reducer';
 
 @Component({
   selector: 'app-shopping-edit',
@@ -21,19 +22,24 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   editedItemIndex: number;
   editedItem: Ingredient;
 
-  constructor(private slService: ShoppingListService) {}
+  constructor(
+    private slService: ShoppingListService,
+  ) {}
 
   ngOnInit() {
-    this.subscription = this.slService.startedEditing
+    this.subscription = this.slService.getShoppingListState()
       .subscribe(
-        (index: number) => {
-          this.editedItemIndex = index;
-          this.editMode = true;
-          this.editedItem = this.slService.getIngredient(index);
-          this.slForm.setValue({
-            name: this.editedItem.name,
-            amount: this.editedItem.amount
-          });
+        (stateData: fromShoppingList.State) => {
+          if (stateData.editedIngredientIndex > -1) {
+            this.editMode = true;
+            this.editedItem = stateData.editedIngredient;
+            this.slForm.setValue({
+              name: this.editedItem.name,
+              amount: this.editedItem.amount
+            });
+          } else {
+            this.editMode = false;
+          }
         }
       );
   }
@@ -53,6 +59,7 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   onClear() {
     this.slForm.reset();
     this.editMode = false;
+    this.slService.stopEditing();
   }
 
   onDelete() {
@@ -62,6 +69,7 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.slService.stopEditing();
   }
 
 }
