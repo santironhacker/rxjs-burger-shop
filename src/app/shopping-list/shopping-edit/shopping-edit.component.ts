@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
 import { Ingredient } from '../../shared/ingredient.model';
 import { ShoppingListService } from '../shopping-list.service';
 import { Store } from '@ngrx/store';
-import * as ShoppingListActions from "../store/shopping-list.actions";
+import * as ShoppingListActions from '../store/shopping-list.actions';
 
 @Component({
   selector: 'app-shopping-edit',
