@@ -40,14 +40,13 @@ export class ShoppingListService {
     this.store.dispatch(new ShoppingListActions.AddIngredients(ingredients));
   }
 
-  updateIngredient(index: number, newIngredient: Ingredient) {
+  updateIngredient(newIngredient: Ingredient) {
     this.store.dispatch(new ShoppingListActions.UpdateIngredient({
-      index,
       ingredient: newIngredient,
     }));
   }
 
-  deleteIngredient(index: number) {
-    this.store.dispatch(new ShoppingListActions.DeleteIngredients(index) );
+  deleteIngredient(ingredient: Ingredient) {
+    this.store.dispatch(new ShoppingListActions.DeleteIngredient(ingredient) );
   }
 }
